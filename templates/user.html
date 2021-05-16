@@ -1,0 +1,43 @@
+{% extends 'base.html'  %}
+{% block title %}User Details{% endblock %}
+{% block content %}
+
+<div class="row">
+  
+    <div class="col-sm-10 col-12">
+      <h1>{{ user.full_name }}</h1>
+      <p>username: {{ user.username }}</p>
+      <p>email: {{ user.email }}</p>
+
+      <h2>User feedback</h2>
+      <div>
+        {% for feedback in user.feedback %}
+        <div class="card my-4">
+          <div class="card-body">
+            <h5 class="card-title text-info">
+              {{feedback.username}}
+              {% if session['username'] == feedback.username %}
+              <form style="display:inline;" action="/feedback/{{ feedback.id }}/delete" method="POST">
+                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+              </form>
+              {% endif %}
+            </h5>
+            {% if session['username'] == feedback.username %}
+            <h6 class="card-subtitle mb-2"><a href="/feedback/{{ feedback.id }}/update">{{ feedback.title }}</a></h6>
+            {% else %}
+            <h6 class="card-subtitle mb-2">{{ feedback.title }}</h6>
+            {% endif %}
+            <p class="card-text">
+              {{feedback.content}}
+            </p>
+      
+          </div>
+        </div>
+        {%  endfor %}
+
+        {% if session['username'] == feedback.username %}
+        <p><a href="/users/{{ user.username }}/feedback/add" class="btn btn-primary">Add Feedback</a></p>
+        {% endif %}
+
+
+{% endblock %}
